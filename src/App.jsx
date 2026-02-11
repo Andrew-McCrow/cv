@@ -12,7 +12,6 @@ function App() {
     <>
       <Header />
       <div className="layout">
-        <div className="layout">
           <div className="panel panel--form">
             <Section>
               <Card cardHeading="Personal Information">
@@ -46,9 +45,7 @@ function App() {
               <Display cvData={cvData} />
             </Section>
           </div>
-        </div>
       </div>  
-      
     </>
   )
 }
