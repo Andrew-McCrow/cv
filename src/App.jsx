@@ -21,6 +21,37 @@ function App() {
     }))
   }
 
+  const updateEducation = (field) => (e) => {
+    const value = field === "graduationYear" ? Number(e.target.value) : e.target.value
+    setFormData((prev) => {
+      const updatedEducation = [...prev.education]
+      updatedEducation[0] = {
+        ...updatedEducation[0],
+        [field]: value,
+      }
+      return {
+        ...prev,
+        education: updatedEducation,
+      }
+    })
+  }
+
+  const updateWork = (field) => (e) => {
+    const value = e.target.value
+    setFormData((prev) => {
+      const updatedWork = {
+        ...prev.workExperience[0],
+        [field]: field === "responsibilities"
+          ? value.split("\n").filter(Boolean)
+          : value,
+      }
+      return {
+        ...prev,
+        workExperience: [updatedWork],
+      }
+    })
+  }
+
   return (
     <>
       <Header />
@@ -48,19 +79,64 @@ function App() {
               </Card>
               <Card cardHeading="Education">
                 <Form>
-                  <FormElements inputLabel="School Name" type="text" />
-                  <FormElements inputLabel="Degree" type="text" />
-                  <FormElements inputLabel="Field of Study" type="text" />
-                  <FormElements inputLabel="Graduation Year" type="number" />
+                  <FormElements
+                    inputLabel="School Name"
+                    type="text"
+                    value={formData.education[0].schoolName}
+                    onChange={updateEducation("schoolName")}
+                  />
+                  <FormElements
+                    inputLabel="Degree"
+                    type="text"
+                    value={formData.education[0].degree}
+                    onChange={updateEducation("degree")}
+                  />
+                  <FormElements
+                    inputLabel="Field of Study"
+                    type="text"
+                    value={formData.education[0].fieldOfStudy}
+                    onChange={updateEducation("fieldOfStudy")}
+                  />
+                  <FormElements
+                    inputLabel="Graduation Year"
+                    type="number"
+                    value={formData.education[0].graduationYear}
+                    onChange={updateEducation("graduationYear")}
+                  />
                 </Form>
               </Card>
               <Card cardHeading="Work Experience">
                 <Form>
-                  <FormElements inputLabel="Company Name" type="text" />
-                  <FormElements inputLabel="Position" type="text" />
-                  <FormElements inputLabel="Start Date" type="date" />
-                  <FormElements inputLabel="End Date" type="date" />
-                  <FormElements inputLabel="Responsibilities" type="textarea" />
+                  <FormElements
+                    inputLabel="Company Name"
+                    type="text"
+                    value={formData.workExperience[0].companyName}
+                    onChange={updateWork("companyName")}
+                  />
+                  <FormElements
+                    inputLabel="Position"
+                    type="text"
+                    value={formData.workExperience[0].position}
+                    onChange={updateWork("position")}
+                  />
+                  <FormElements
+                    inputLabel="Start Date"
+                    type="date"
+                    value={formData.workExperience[0].startDate}
+                    onChange={updateWork("startDate")}
+                  />
+                  <FormElements
+                    inputLabel="End Date"
+                    type="date"
+                    value={formData.workExperience[0].endDate}
+                    onChange={updateWork("endDate")}
+                  />
+                  <FormElements
+                    inputLabel="Responsibilities"
+                    type="textarea"
+                    value={formData.workExperience[0].responsibilities.join("\n")}
+                    onChange={updateWork("responsibilities")}
+                  />
                 </Form>
               </Card>
             </Section>
