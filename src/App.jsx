@@ -9,6 +9,7 @@ import Display from './components/Display'
 import cvData from './cvData'
 
 function App() {
+  
   // Initialize form data with default values from cvData
   const [formData, setFormData] = useState({
     ...cvData,
