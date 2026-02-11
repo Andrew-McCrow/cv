@@ -63,6 +63,12 @@
   justify-content: center;
 }
 
+.preview-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
 .header {
   display: flex;
   justify-content: center;
@@ -87,6 +93,39 @@
 .form {
   display: grid;
   gap: 0.85rem;
+}
+
+.btn {
+  justify-self: start;
+  border-radius: 8px;
+  border: 1px solid #1d4ed8;
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: #1d4ed8;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+.btn:focus {
+  outline: 3px solid rgba(37, 99, 235, 0.4);
+  outline-offset: 2px;
+}
+
+.btn--danger {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+.btn--danger:hover {
+  background: #991b1b;
+  border-color: #991b1b;
 }
 
 .form-elements {

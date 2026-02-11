@@ -1,7 +1,7 @@
 let cvData = {
     "personalInfo": {
-        "name": "Andrew McCrow",
-        "email": "andrew@gmail.com",
+        "name": "Your Name",
+        "email": "your.email@example.com",
         "phone": "123-456-7890",
         },
     "education": [

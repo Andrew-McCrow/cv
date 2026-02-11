@@ -9,8 +9,14 @@ import Display from './components/Display'
 import cvData from './cvData'
 
 function App() {
-  const [formData, setFormData] = useState(cvData);
+  // Initialize form data with default values from cvData
+  const [formData, setFormData] = useState({
+    ...cvData,
+    education: [],
+    workExperience: [],
+  });
 
+  // Handlers for updating form data
   const updateInfo = (field) => (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -21,14 +27,15 @@ function App() {
     }))
   }
 
-  const updateEducation = (field) => (e) => {
-    const value = field === "graduationYear" ? Number(e.target.value) : e.target.value
+  // Handlers for education entries
+  const updateEducation = (index, field) => (e) => {
+    const value = e.target.value
     setFormData((prev) => {
-      const updatedEducation = [...prev.education]
-      updatedEducation[0] = {
-        ...updatedEducation[0],
-        [field]: value,
-      }
+      const updatedEducation = prev.education.map((entry, idx) => (
+        idx === index
+          ? { ...entry, [field]: value }
+          : entry
+      ))
       return {
         ...prev,
         education: updatedEducation,
@@ -36,20 +43,74 @@ function App() {
     })
   }
 
-  const updateWork = (field) => (e) => {
+  // Handlers for work experience entries
+  const addEducation = () => {
+    setFormData((prev) => ({
+      ...prev,
+      education: [
+        ...prev.education,
+        {
+          schoolName: "",
+          degree: "",
+          fieldOfStudy: "",
+          graduationYear: "",
+        },
+      ],
+    }))
+  }
+
+  // Handler to delete an education entry
+  const deleteEducation = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      education: prev.education.filter((_, idx) => idx !== index),
+    }))
+  }
+
+  // Handler to update work experience entries
+  const updateWork = (index, field) => (e) => {
     const value = e.target.value
     setFormData((prev) => {
-      const updatedWork = {
-        ...prev.workExperience[0],
-        [field]: field === "responsibilities"
-          ? value.split("\n").filter(Boolean)
-          : value,
-      }
+      const updatedWork = prev.workExperience.map((entry, idx) => (
+        idx === index
+          ? {
+            ...entry,
+            [field]: field === "responsibilities"
+              ? value.split("\n").filter(Boolean)
+              : value,
+          }
+          : entry
+      ))
       return {
         ...prev,
-        workExperience: [updatedWork],
+        workExperience: updatedWork,
       }
     })
+  }
+
+  // Handler to add a new work experience entry
+  const addWorkExperience = () => {
+    setFormData((prev) => ({
+      ...prev,
+      workExperience: [
+        ...prev.workExperience,
+        {
+          companyName: "",
+          position: "",
+          startDate: "",
+          endDate: "",
+          responsibilities: [],
+        },
+      ],
+    }))
+  }
+
+  // Handler to delete a work experience entry
+  const deleteWorkExperience = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      workExperience: prev.workExperience.filter((_, idx) => idx !== index),
+    }))
   }
 
   return (
@@ -78,72 +139,96 @@ function App() {
                 </Form>
               </Card>
               <Card cardHeading="Education">
-                <Form>
-                  <FormElements
-                    inputLabel="School Name"
-                    type="text"
-                    value={formData.education[0].schoolName}
-                    onChange={updateEducation("schoolName")}
-                  />
-                  <FormElements
-                    inputLabel="Degree"
-                    type="text"
-                    value={formData.education[0].degree}
-                    onChange={updateEducation("degree")}
-                  />
-                  <FormElements
-                    inputLabel="Field of Study"
-                    type="text"
-                    value={formData.education[0].fieldOfStudy}
-                    onChange={updateEducation("fieldOfStudy")}
-                  />
-                  <FormElements
-                    inputLabel="Graduation Year"
-                    type="number"
-                    value={formData.education[0].graduationYear}
-                    onChange={updateEducation("graduationYear")}
-                  />
-                </Form>
+                <button type="button" className="btn" onClick={addEducation}>
+                  Add education
+                </button>
+                {formData.education.length === 0 ? null : (
+                  formData.education.map((edu, index) => (
+                    <Form key={index}>
+                      <FormElements
+                        inputLabel="School Name"
+                        type="text"
+                        value={edu.schoolName}
+                        onChange={updateEducation(index, "schoolName")}
+                      />
+                      <FormElements
+                        inputLabel="Degree"
+                        type="text"
+                        value={edu.degree}
+                        onChange={updateEducation(index, "degree")}
+                      />
+                      <FormElements
+                        inputLabel="Field of Study"
+                        type="text"
+                        value={edu.fieldOfStudy}
+                        onChange={updateEducation(index, "fieldOfStudy")}
+                      />
+                      <FormElements
+                        inputLabel="Graduation Year"
+                        type="date"
+                        value={edu.graduationYear}
+                        onChange={updateEducation(index, "graduationYear")}
+                      />
+                      <button type="button" className="btn btn--danger" onClick={() => deleteEducation(index)}>
+                        Delete education
+                      </button>
+                    </Form>
+                  ))
+                )}
               </Card>
               <Card cardHeading="Work Experience">
-                <Form>
-                  <FormElements
-                    inputLabel="Company Name"
-                    type="text"
-                    value={formData.workExperience[0].companyName}
-                    onChange={updateWork("companyName")}
-                  />
-                  <FormElements
-                    inputLabel="Position"
-                    type="text"
-                    value={formData.workExperience[0].position}
-                    onChange={updateWork("position")}
-                  />
-                  <FormElements
-                    inputLabel="Start Date"
-                    type="date"
-                    value={formData.workExperience[0].startDate}
-                    onChange={updateWork("startDate")}
-                  />
-                  <FormElements
-                    inputLabel="End Date"
-                    type="date"
-                    value={formData.workExperience[0].endDate}
-                    onChange={updateWork("endDate")}
-                  />
-                  <FormElements
-                    inputLabel="Responsibilities"
-                    type="textarea"
-                    value={formData.workExperience[0].responsibilities.join("\n")}
-                    onChange={updateWork("responsibilities")}
-                  />
-                </Form>
+                <button type="button" className="btn" onClick={addWorkExperience}>
+                  Add work experience
+                </button>
+                {formData.workExperience.length === 0 ? null : (
+                  formData.workExperience.map((work, index) => (
+                    <Form key={index}>
+                      <FormElements
+                        inputLabel="Company Name"
+                        type="text"
+                        value={work.companyName}
+                        onChange={updateWork(index, "companyName")}
+                      />
+                      <FormElements
+                        inputLabel="Position"
+                        type="text"
+                        value={work.position}
+                        onChange={updateWork(index, "position")}
+                      />
+                      <FormElements
+                        inputLabel="Start Date"
+                        type="date"
+                        value={work.startDate}
+                        onChange={updateWork(index, "startDate")}
+                      />
+                      <FormElements
+                        inputLabel="End Date"
+                        type="date"
+                        value={work.endDate}
+                        onChange={updateWork(index, "endDate")}
+                      />
+                      <FormElements
+                        inputLabel="Responsibilities"
+                        type="textarea"
+                        value={work.responsibilities.join("\n")}
+                        onChange={updateWork(index, "responsibilities")}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn--danger"
+                        onClick={() => deleteWorkExperience(index)}
+                      >
+                        Delete work experience
+                      </button>
+                    </Form>
+                  ))
+                )}
               </Card>
             </Section>
           </div>
           <div className="panel panel--preview">
             <Section>
-              <Display cvData={formData} />
+              <Display cvData={formData}></Display>
             </Section>
           </div>
       </div>  
