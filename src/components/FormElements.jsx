@@ -1,7 +1,5 @@
-import { useState } from "react";
 
-export default function FormElements({ inputLabel, type }) {
-    const [value, setValue] = useState("");
+export default function FormElements({ inputLabel, type, value, onChange }) {
   return (
     <div className="form-elements">
         <label htmlFor="input" className="form-elements__label">{inputLabel}</label>
@@ -10,7 +8,7 @@ export default function FormElements({ inputLabel, type }) {
             id="input" 
             className="form-elements__input" 
             value={value} 
-            onChange={e => setValue(e.target.value)} />
+            onChange={onChange} />
     </div>
   )
 }

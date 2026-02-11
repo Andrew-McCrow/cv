@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './styles/App.css'
 import Section from './components/Section'
 import Header from './components/Header'
@@ -8,6 +9,18 @@ import Display from './components/Display'
 import cvData from './cvData'
 
 function App() {
+  const [formData, setFormData] = useState(cvData);
+
+  const updateInfo = (field) => (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      personalInfo: {
+        ...prev.personalInfo,
+        [field]: e.target.value,
+      },
+    }))
+  }
+
   return (
     <>
       <Header />
@@ -16,9 +29,21 @@ function App() {
             <Section>
               <Card cardHeading="Personal Information">
                 <Form>
-                  <FormElements inputLabel="Name" type="text" />
-                  <FormElements inputLabel="Email" type="email" />
-                  <FormElements inputLabel="Phone Number" type="tel" />
+                  <FormElements 
+                    inputLabel="Name" 
+                    type="text" 
+                    value ={formData.personalInfo.name}
+                    onChange={updateInfo("name")} />
+                  <FormElements 
+                    inputLabel="Email" 
+                    type="email" 
+                    value={formData.personalInfo.email}
+                    onChange={updateInfo("email")} />
+                  <FormElements 
+                    inputLabel="Phone Number" 
+                    type="text" 
+                    value={formData.personalInfo.phone}
+                    onChange={updateInfo("phone")} />
                 </Form>
               </Card>
               <Card cardHeading="Education">
@@ -42,7 +67,7 @@ function App() {
           </div>
           <div className="panel panel--preview">
             <Section>
-              <Display cvData={cvData} />
+              <Display cvData={formData} />
             </Section>
           </div>
       </div>  
